@@ -157,7 +157,7 @@ const ADMIN = (items) => `<!DOCTYPE html><html lang="zh-CN"><head><meta charset=
     <button class="btn" id="btn-save" onclick="submitForm()">添加</button>
     <button class="btn ghost" onclick="resetForm()">清空</button>
     <span class="hint" id="edit-hint"></span>
-    <span class="hint">到期填 <code>-</code> 表示无限期</span>
+    <span class="hint">到期可填日期，或直接填 <code>-</code>（会原样显示）</span>
   </div>
 </div>
 
