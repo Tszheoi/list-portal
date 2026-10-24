@@ -90,6 +90,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{text-align:left;padding:11px 10px;border-bottom:1px solid #1e2531;vertical-align:top}
 th{color:#8b93a7;font-size:12.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
 td.acc{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;color:#a5b4fc;word-break:break-all}
+td.memo{font-size:13px;color:#8b93a7;word-break:break-word;white-space:pre-wrap}
 .exp{white-space:nowrap}
 .exp.bad{color:#fca5a5;font-weight:600}
 .exp.soon{color:#fbbf24}
@@ -148,13 +149,14 @@ const TABLE = (items, role) => `<!DOCTYPE html><html lang="zh-CN"><head><meta ch
 <button class="btn ghost sm" onclick="logout()">退出</button></div></div>
 
 ${items.length ? `<table>
-<thead><tr><th style="width:20%">类型</th><th style="width:28%">名字</th><th class="hide-sm" style="width:30%">账号</th><th style="width:22%">到期</th></tr></thead>
+<thead><tr><th style="width:14%">类型</th><th style="width:22%">名字</th><th class="hide-sm" style="width:24%">账号</th><th style="width:18%">到期</th><th style="width:22%">备注</th></tr></thead>
 <tbody>
 ${items.map(it => `<tr>
   <td>${esc(it.type) || '—'}</td>
   <td>${esc(it.name) || '—'}</td>
   <td class="acc hide-sm">${esc(it.account) || '—'}</td>
   <td class="exp ${expClass(it.expire)}">${esc(expText(it.expire))}</td>
+  <td class="memo">${esc(it.note) || '—'}</td>
 </tr>`).join('')}
 </tbody></table>
 <div class="hint">共 ${items.length} 项 · 按到期时间排序</div>`
