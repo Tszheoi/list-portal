@@ -144,7 +144,7 @@ const TABLE = (items, role) => `<!DOCTYPE html><html lang="zh-CN"><head><meta ch
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>订阅</title>
 <style>${STYLE}</style></head><body><div class="wrap">
 <div class="top"><h1>订阅</h1><div class="row">
-${role === 'admin' ? '<a class="btn ghost sm" href="/tsz">管理</a>' : ''}
+<a class="btn ghost sm" href="/tsz">管理</a>
 <button class="btn ghost sm" onclick="logout()">退出</button></div></div>
 
 ${items.length ? `<table>
