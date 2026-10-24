@@ -142,7 +142,11 @@ function expClass(expire) {
   return 'ok';
 }
 function expText(expire) {
-  if (isForever(expire)) return '无限期';
+  // 非日期内容（如 -、留空、文字）原样显示，不做任何翻译
+  if (isForever(expire)) {
+    const raw = String(expire == null ? '' : expire).trim();
+    return raw.length ? raw : '-';
+  }
   const d = daysLeft(expire);
   if (d === null) return String(expire);
   if (d < 0) return expire + '（已过期）';
