@@ -94,6 +94,7 @@ td.memo{font-size:13px;color:#8b93a7;word-break:break-word;white-space:pre-wrap}
 .exp{white-space:nowrap}
 .exp.bad{color:#fca5a5;font-weight:600}
 .exp.soon{color:#fbbf24}
+.exp.forever{color:#9ca3af}
 .exp.ok{color:#9ca3af}
 .login{max-width:340px;margin:18vh auto;padding:0 18px}
 .login h1{font-size:20px;margin-bottom:6px}
@@ -118,13 +119,21 @@ const LOGIN = (err) => `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="u
 ${err ? `<div class="err">${esc(err)}</div>` : ''}
 </form></div></body></html>`;
 
+// 无限期 / 无日期的写法
+const FOREVER = ['-', '—', '–', '∞', '永久', '无限期', '无限', 'never', 'n/a', 'na', 'none'];
+function isForever(expire) {
+  const s = String(expire == null ? '' : expire).trim().toLowerCase();
+  if (s.length === 0) return true;
+  return FOREVER.indexOf(s) >= 0;
+}
 function daysLeft(expire) {
-  if (!expire) return null;
+  if (isForever(expire)) return null;
   const t = Date.parse(expire + 'T23:59:59');
   if (isNaN(t)) return null;
   return Math.ceil((t - Date.now()) / 86400000);
 }
 function expClass(expire) {
+  if (isForever(expire)) return 'forever';
   const d = daysLeft(expire);
   if (d === null) return 'ok';
   if (d < 0) return 'bad';
@@ -132,9 +141,9 @@ function expClass(expire) {
   return 'ok';
 }
 function expText(expire) {
+  if (isForever(expire)) return '无限期';
   const d = daysLeft(expire);
-  if (!expire) return '—';
-  if (d === null) return expire;
+  if (d === null) return String(expire);
   if (d < 0) return expire + '（已过期）';
   if (d === 0) return expire + '（今天）';
   if (d <= 30) return expire + '（剩 ' + d + ' 天）';
@@ -159,7 +168,7 @@ ${items.map(it => `<tr>
   <td class="memo">${esc(it.note) || '—'}</td>
 </tr>`).join('')}
 </tbody></table>
-<div class="hint">共 ${items.length} 项 · 按到期时间排序</div>`
+<div class="hint">共 ${items.length} 项 · 顺序可在后台调整</div>`
 : '<div class="empty">还没有订阅记录</div>'}
 
 </div>
@@ -184,7 +193,7 @@ export async function onRequest(ctx) {
     } catch (e) {
       items = [];
     }
-    items.sort((a, b) => String(a.expire || '9999').localeCompare(String(b.expire || '9999')));
+    // 按后台保存的顺序显示（不再按到期自动排序）
     return new Response(TABLE(items, role), { headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
   }
 
