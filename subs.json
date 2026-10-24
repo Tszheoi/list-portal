@@ -1,28 +1,3 @@
 {
-  "items": [
-    {
-      "type": "会员",
-      "name": "夸克SVIP",
-      "account": "188****0000",
-      "amount": "198 元/年",
-      "expire": "2027-03-15",
-      "note": "年付"
-    },
-    {
-      "type": "永久",
-      "name": "GitHub Pro",
-      "account": "ts****ei",
-      "amount": "0",
-      "expire": "-",
-      "note": "学生包"
-    },
-    {
-      "type": "云服务",
-      "name": "华为云空间",
-      "account": "pe****@mail.tszheoi-law.top",
-      "amount": "58 元/年",
-      "expire": "2026-11-20",
-      "note": "50G"
-    }
-  ]
+  "items": []
 }
