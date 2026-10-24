@@ -111,7 +111,11 @@ td.amt{font-size:13.5px;color:#d1d5db;white-space:nowrap;font-variant-numeric:ta
 
 const LOGIN = (err) => `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>订阅管理</title>
-<style>${STYLE}</style></head><body><div class="login">
+<style>${STYLE}</style><link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head><body><div class="login">
 <h1>订阅管理</h1><p>需要密码才能查看</p>
 <form method="POST" action="/">
 <input type="hidden" name="action" value="login">
@@ -157,7 +161,11 @@ function expText(expire) {
 
 const TABLE = (items, role) => `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>订阅</title>
-<style>${STYLE}</style></head><body><div class="wrap">
+<style>${STYLE}</style><link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head><body><div class="wrap">
 <div class="top"><h1>订阅</h1><div class="row">
 <a class="btn ghost sm" href="/tsz">管理</a>
 <button class="btn ghost sm" onclick="logout()">退出</button></div></div>
