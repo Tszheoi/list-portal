@@ -109,6 +109,7 @@ th,td{text-align:left;padding:10px 9px;border-bottom:1px solid #1e2531;vertical-
 th{color:#8b93a7;font-size:12.5px;font-weight:600}
 td.acc{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;color:#a5b4fc;word-break:break-all}
 td.memo{font-size:13px;color:#8b93a7;word-break:break-word;white-space:pre-wrap}
+td.amt{font-size:13px;color:#d1d5db;white-space:nowrap;font-variant-numeric:tabular-nums}
 .sorter{display:flex;flex-direction:column;gap:3px}
 .mv{background:#1c232f;border:0;color:#c3cad8;border-radius:6px;font-size:10px;line-height:1;padding:4px 6px;cursor:pointer}
 .mv:hover{background:#27303f;color:#fff}
@@ -119,7 +120,7 @@ td.memo{font-size:13px;color:#8b93a7;word-break:break-word;white-space:pre-wrap}
 .err{color:#fca5a5;font-size:13px;margin-top:10px}
 .hint{color:#6b7488;font-size:12.5px;margin-top:10px}
 .panel{background:#141922;border:1px solid #1e2531;border-radius:12px;padding:14px;margin-bottom:18px}
-.grid{display:grid;grid-template-columns:0.9fr 1.1fr 1.2fr 0.9fr 1.1fr;gap:9px}
+.grid{display:grid;grid-template-columns:0.8fr 1fr 1.1fr 0.7fr 1fr 1fr;gap:9px}
 @media(max-width:860px){.grid{grid-template-columns:1fr 1fr}}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1e293b;border:1px solid #334155;color:#e6e8ee;padding:9px 16px;border-radius:9px;font-size:13.5px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 .toast.on{opacity:1}
@@ -148,6 +149,7 @@ const ADMIN = (items) => `<!DOCTYPE html><html lang="zh-CN"><head><meta charset=
     <input class="inp" id="f-type" placeholder="类型（如 会员/云服务）">
     <input class="inp" id="f-name" placeholder="名字（如 夸克SVIP）">
     <input class="inp" id="f-account" placeholder="账号">
+    <input class="inp" id="f-amount" placeholder="金额">
     <input class="inp" id="f-expire" type="text" placeholder="到期，如 2027-03-15 或 -">
     <input class="inp" id="f-note" placeholder="备注（选填）">
   </div>
@@ -160,7 +162,7 @@ const ADMIN = (items) => `<!DOCTYPE html><html lang="zh-CN"><head><meta charset=
 </div>
 
 <table>
-<thead><tr><th style="width:7%">序</th><th style="width:12%">类型</th><th style="width:17%">名字</th><th style="width:21%">账号</th><th style="width:14%">到期</th><th style="width:15%">备注</th><th style="width:14%"></th></tr></thead>
+<thead><tr><th style="width:6%">序</th><th style="width:10%">类型</th><th style="width:15%">名字</th><th style="width:18%">账号</th><th style="width:9%">金额</th><th style="width:13%">到期</th><th style="width:14%">备注</th><th style="width:15%"></th></tr></thead>
 <tbody id="rows">
 ${items.map((it, i) => `<tr>
   <td>
@@ -172,13 +174,14 @@ ${items.map((it, i) => `<tr>
   <td>${esc(it.type) || '—'}</td>
   <td>${esc(it.name) || '—'}</td>
   <td class="acc">${esc(it.account) || '—'}</td>
+  <td class="amt">${esc(it.amount) || '—'}</td>
   <td>${esc(it.expire) || '—'}</td>
   <td class="memo">${esc(it.note) || '—'}</td>
   <td><div class="row">
     <button class="btn ghost sm" onclick="edit(${i})">编辑</button>
     <button class="btn danger sm" onclick="del(${i})">删除</button>
   </div></td>
-</tr>`).join('') || '<tr><td colspan="7" class="hint">还没有记录</td></tr>'}
+</tr>`).join('') || '<tr><td colspan="8" class="hint">还没有记录</td></tr>'}
 </tbody></table>
 
 <div class="toast" id="toast"></div>
@@ -191,7 +194,7 @@ function toast(m){var t=document.getElementById('toast');t.textContent=m;t.class
 
 function resetForm(){
   editIndex = -1;
-  ['f-type','f-name','f-account','f-expire','f-note'].forEach(function(id){ document.getElementById(id).value = ''; });
+  ['f-type','f-name','f-account','f-amount','f-expire','f-note'].forEach(function(id){ document.getElementById(id).value = ''; });
   document.getElementById('btn-save').textContent = '添加';
   document.getElementById('edit-hint').textContent = '';
 }
@@ -201,6 +204,7 @@ function submitForm(){
     type: document.getElementById('f-type').value.trim(),
     name: document.getElementById('f-name').value.trim(),
     account: document.getElementById('f-account').value.trim(),
+    amount: document.getElementById('f-amount').value.trim(),
     expire: document.getElementById('f-expire').value.trim(),
     note: document.getElementById('f-note').value.trim()
   };
@@ -215,6 +219,7 @@ function edit(i){
   document.getElementById('f-type').value = it.type || '';
   document.getElementById('f-name').value = it.name || '';
   document.getElementById('f-account').value = it.account || '';
+  document.getElementById('f-amount').value = it.amount || '';
   document.getElementById('f-expire').value = it.expire || '';
   document.getElementById('f-note').value = it.note || '';
   editIndex = i;
@@ -291,6 +296,7 @@ export async function onRequest(ctx) {
         type: String(x.type || '').trim().slice(0, 40),
         name: String(x.name || '').trim().slice(0, 80),
         account: String(x.account || '').trim().slice(0, 120),
+        amount: String(x.amount || '').trim().slice(0, 30),
         expire: String(x.expire || '').trim().slice(0, 20),
         note: String(x.note || '').trim().slice(0, 200),
       })).filter(x => x.name);
