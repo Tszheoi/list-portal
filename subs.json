@@ -1,3 +1,16 @@
 {
-  "items": []
+  "items": [
+    {
+      "type": "会员",
+      "name": "夸克 SVIP",
+      "account": "test@example.com",
+      "expire": "2027-03-15"
+    },
+    {
+      "type": "云服务",
+      "name": "华为云空间",
+      "account": "13800138000",
+      "expire": "2026-11-20"
+    }
+  ]
 }
