@@ -109,6 +109,10 @@ th,td{text-align:left;padding:10px 9px;border-bottom:1px solid #1e2531;vertical-
 th{color:#8b93a7;font-size:12.5px;font-weight:600}
 td.acc{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;color:#a5b4fc;word-break:break-all}
 td.memo{font-size:13px;color:#8b93a7;word-break:break-word;white-space:pre-wrap}
+.sorter{display:flex;flex-direction:column;gap:3px}
+.mv{background:#1c232f;border:0;color:#c3cad8;border-radius:6px;font-size:10px;line-height:1;padding:4px 6px;cursor:pointer}
+.mv:hover{background:#27303f;color:#fff}
+.mv:disabled{opacity:.25;cursor:default}
 .login{max-width:340px;margin:18vh auto;padding:0 18px}
 .login h1{font-size:20px;margin-bottom:6px}
 .login p{color:#8b93a7;font-size:13px;margin:0 0 20px}
@@ -144,20 +148,27 @@ const ADMIN = (items) => `<!DOCTYPE html><html lang="zh-CN"><head><meta charset=
     <input class="inp" id="f-type" placeholder="类型（如 会员/云服务）">
     <input class="inp" id="f-name" placeholder="名字（如 夸克SVIP）">
     <input class="inp" id="f-account" placeholder="账号">
-    <input class="inp" id="f-expire" type="date" placeholder="到期时间">
+    <input class="inp" id="f-expire" type="text" placeholder="到期，如 2027-03-15 或 -">
     <input class="inp" id="f-note" placeholder="备注（选填）">
   </div>
   <div class="row" style="margin-top:10px">
     <button class="btn" id="btn-save" onclick="submitForm()">添加</button>
     <button class="btn ghost" onclick="resetForm()">清空</button>
     <span class="hint" id="edit-hint"></span>
+    <span class="hint">到期填 <code>-</code> 表示无限期</span>
   </div>
 </div>
 
 <table>
-<thead><tr><th style="width:13%">类型</th><th style="width:19%">名字</th><th style="width:23%">账号</th><th style="width:15%">到期</th><th style="width:16%">备注</th><th style="width:14%"></th></tr></thead>
+<thead><tr><th style="width:7%">序</th><th style="width:12%">类型</th><th style="width:17%">名字</th><th style="width:21%">账号</th><th style="width:14%">到期</th><th style="width:15%">备注</th><th style="width:14%"></th></tr></thead>
 <tbody id="rows">
 ${items.map((it, i) => `<tr>
+  <td>
+    <div class="sorter">
+      <button class="mv" onclick="moveUp(${i})" ${i === 0 ? 'disabled' : ''} title="上移">▲</button>
+      <button class="mv" onclick="moveDown(${i})" ${i === items.length - 1 ? 'disabled' : ''} title="下移">▼</button>
+    </div>
+  </td>
   <td>${esc(it.type) || '—'}</td>
   <td>${esc(it.name) || '—'}</td>
   <td class="acc">${esc(it.account) || '—'}</td>
@@ -167,7 +178,7 @@ ${items.map((it, i) => `<tr>
     <button class="btn ghost sm" onclick="edit(${i})">编辑</button>
     <button class="btn danger sm" onclick="del(${i})">删除</button>
   </div></td>
-</tr>`).join('') || '<tr><td colspan="6" class="hint">还没有记录</td></tr>'}
+</tr>`).join('') || '<tr><td colspan="7" class="hint">还没有记录</td></tr>'}
 </tbody></table>
 
 <div class="toast" id="toast"></div>
@@ -211,6 +222,9 @@ function edit(i){
   document.getElementById('edit-hint').textContent = '正在编辑：' + (it.name || '');
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
+function moveUp(i){ if(i<=0) return; var n=items.slice(); var t=n[i-1]; n[i-1]=n[i]; n[i]=t; save(n); }
+function moveDown(i){ if(i>=items.length-1) return; var n=items.slice(); var t=n[i+1]; n[i+1]=n[i]; n[i]=t; save(n); }
 
 function del(i){
   if(!confirm('删除「' + (items[i].name || '') + '」？')) return;
