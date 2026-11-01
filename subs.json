@@ -26,19 +26,19 @@
     },
     {
       "type": "电话号",
-      "name": "Club SIM-香港",
-      "account": "****9850",
-      "amount": "38 HKD",
-      "expire": "2027-01-01",
-      "note": "年付（待重新配置）"
-    },
-    {
-      "type": "电话号",
       "name": "中国联通-香港",
       "account": "13266942975",
       "amount": "9 HKD",
       "expire": "2026-11-28",
       "note": "余额27-04"
+    },
+    {
+      "type": "电话号",
+      "name": "Club SIM-香港",
+      "account": "****9850",
+      "amount": "38 HKD",
+      "expire": "2027-01-01",
+      "note": "年付（待重新配置）"
     },
     {
       "type": "电话号",
