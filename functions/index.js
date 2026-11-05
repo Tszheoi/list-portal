@@ -224,8 +224,8 @@ export async function onRequest(ctx) {
     if (action === 'login') {
       const pw = String(body.pw || '');
       let role = null;
-      if (pw === c.adminPw) role = 'admin';
-      else if (pw === c.viewPw) role = 'view';
+      // 前台只认查看密码（严格区分大小写）；管理密码只能在 /tsz 使用
+      if (pw === c.viewPw) role = 'view';
       if (!role) {
         return new Response(LOGIN('密码不对'), { status: 401, headers: { 'content-type': 'text/html; charset=utf-8' } });
       }
